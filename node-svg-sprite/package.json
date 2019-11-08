@@ -1,0 +1,16 @@
+{
+  "name": "node-svg-sprite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nicolas Müller Noulezas",
+  "license": "ISC",
+  "devDependencies": {
+    "fast-html-parser": "^1.0.1",
+    "lodash.merge": "^4.6.1",
+    "simple-svg-tools": "^1.1.12"
+  }
+}

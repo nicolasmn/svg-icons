@@ -1,0 +1,12 @@
+{
+  "name": "sass-svg-icon",
+  "version": "1.0.0",
+  "description": "SVG icons as background-images",
+  "main": "svg-icons.scss",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Nicolas Müller Noulezas",
+  "license": "ISC"
+}

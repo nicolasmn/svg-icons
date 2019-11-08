@@ -1,0 +1,136 @@
+/// Replace `$search` with `$replace` in `$string`
+/// @param {String} $string - Initial string
+/// @param {String} $search - Substring to replace
+/// @param {String} $replace ('') - New value
+/// @return {String} - Updated string
+@function svg-icon-str-replace($string, $search, $replace: '', $replace-all: false) {
+  $index: str-index($string, $search);
+  @if $index {
+    $appendix: str-slice($string, $index + str-length($search));
+    @if $replace-all {
+      @while str-index($appendix, $search) {
+        $appendix: svg-icon-str-replace($appendix, $search, $replace);
+      }
+    }
+    @return str-slice($string, 1, $index - 1) + $replace + $appendix;
+  }
+  @return $string;
+}
+
+/// Returns last index of `$needle` in `$string`.
+/// @param {String} $string - string to search in
+/// @param {String} $needle - substring to search for
+/// @return {Number} - Last index of `$needle` in `$string`
+@function svg-icon-str-last-index($string, $needle) {
+  $index: str-index($string, $needle);
+  $result: $index;
+  @if $index {
+    @for $i from $index + str-length($needle) through str-length($string) {
+      @if str-slice($string, $i, $i + str-length($needle) - 1) == $needle {
+        $result: $i;
+      }
+    }
+  }
+  @return $result;
+}
+
+/// @access private
+$svg-icon-css-is-root: true;
+
+/// Returns an CSS string of the supplied styles
+/// @param {Map} $style - Map of styles to build
+/// @return {String} - CSS string
+/// @example Without selector
+///   $css: build-css(( color: red ));
+///   // -> ':root{color:red;}'
+/// @example With selector
+///   $css: build-css(( '.selector': ( color: red ) ));
+///   // -> '.selector{color:red;}'
+@function svg-icon-build-css($style: ()) {
+  @if $style == () {
+    @return null;
+  }
+  $string: '';
+  @each $prop, $val in $style {
+    @if type-of($val) == 'map' {
+      $svg-icon-css-is-root: false !global;
+      $string: $string + $prop + '{' + svg-icon-build-css($val);
+    }
+    @else {
+      @if $svg-icon-css-is-root {
+        $string: ':root{';
+        $svg-icon-css-is-root: false !global;
+      }
+      $string: $string + $prop + ':' + $val + ';';
+    }
+    $svg-icon-css-is-root: true !global;
+  }
+  @if svg-icon-str-last-index($string, '}') != str-length($string) {
+    $string: $string + '}';
+  }
+  @return $string;
+}
+
+// Set additional characters to encode in SVG strings
+$svg-icons-encode: () !default;
+
+/// Encodes an SVG string
+/// @param {String} $svg - The raw SVG string
+/// @return {String} - URI-Encoded SVG string
+@function svg-icon-uri($svg) {
+  // Add missing namespace
+  @if not str-index($svg, 'xmlns') {
+    $svg: svg-icon-str-replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+
+  $encoded: '';
+  $slice: 2000;
+  $index: 0;
+  $loops: ceil(str-length($svg) / $slice);
+
+  // Minimal escaping
+  @for $i from 1 through $loops {
+    $chunk: str-slice($svg, $index, $index + $slice - 1);
+    $chunk: svg-icon-str-replace($chunk, '"', '\'', true);
+    $chunk: svg-icon-str-replace($chunk, '%', '%25', true);
+    $chunk: svg-icon-str-replace($chunk, '<', '%3C', true);
+    $chunk: svg-icon-str-replace($chunk, '>', '%3E', true);
+    $chunk: svg-icon-str-replace($chunk, '#', '%23', true);
+    $chunk: svg-icon-str-replace($chunk, '&', '%26', true);
+    @each $search, $replace in $svg-icons-encode {
+      $chunk: svg-icon-str-replace($chunk, $search, $replace, true);
+    }
+    $encoded: #{$encoded}#{$chunk};
+    $index: $index + $slice;
+  }
+
+  @return url("data:image/svg+xml,#{$encoded}");
+}
+
+// Reference map of all SVG icons
+$svg-icons: () !default;
+
+/// Gets an icon from a map of SVG icons and applies styles
+/// @param {String} $name - Key of the icon in `$icon-map`
+/// @param {Map} $style - Styles to apply to the icon
+/// @param {Map} $icon-map ($svg-icons) - Map holding all SVG icons
+@function svg-icon($name, $style: (), $icon-map: $svg-icons) {
+  @if not map-has-key($icon-map, $name) {
+    @warn "The icon `#{$name}` does not exist, add it to `$icon-map` first.";
+    @return null;
+  }
+
+  // Allow pasing just a color for convinience
+  @if type-of($style) == color {
+    $style: (color: $style);
+  }
+
+  $css: svg-icon-build-css($style);
+  $svg: map-get($icon-map, $name);
+
+  @if $css {
+    $svg: svg-icon-str-replace($svg, '>', '><defs><style>#{$css}</style></defs>');
+  }
+
+  @return svg-icon-uri($svg);
+}
