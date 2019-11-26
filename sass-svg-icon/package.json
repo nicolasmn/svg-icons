@@ -1,12 +1,28 @@
 {
   "name": "sass-svg-icon",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "SVG icons as background-images",
   "main": "svg-icons.scss",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "sass",
+    "icon",
+    "function",
+    "util"
+  ],
   "author": "Nicolas Müller Noulezas",
-  "license": "ISC"
+  "license": "ISC",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolasmn/svg-icons.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nicolasmn/svg-icons/issues"
+  },
+  "homepage": "https://github.com/nicolasmn/svg-icons#readme"
 }
