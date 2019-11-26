@@ -128,7 +128,7 @@ $svg-icons: () !default;
   $svg: map-get($icon-map, $name);
 
   @if $css {
-    $svg: svg-icon-str-replace($svg, '>', '><defs><style>#{$css}</style></defs>');
+    $svg: svg-icon-str-replace($svg, '>', '><style>#{$css}</style>');
   }
 
   @return svg-icon-uri($svg);
