@@ -22,7 +22,7 @@ $svg-icons: (
 Compiles to:
 ```css
 .foo {
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cdefs%3E%3Cstyle%3E:root{color:red;}%3C/style%3E%3C/defs%3E%3Ccircle fill="currentColor" cx="50" cy="50" r="50"%3E%3C/circle%3E%3C/svg%3E');
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cstyle%3E:root{color:red;}%3C/style%3E%3Ccircle fill="currentColor" cx="50" cy="50" r="50"%3E%3C/circle%3E%3C/svg%3E');
 }
 ```
 
@@ -61,9 +61,17 @@ The simplest way of using `svg-icon()` is passing just a color after the icon na
 }
 ```
 
-When using this pattern the generated style tag will use the `:root` selector and colorizing works using the `currentColor` variable, so that needs to be set as `fill` or `stroke` on the relevant element(s).
+When using this pattern the generated style tag will use the `:root` selector and colorizing works using the `currentColor` keyword, so that needs to be set as `fill` or `stroke` on the relevant element(s).
 
-If you want to set more than just the color or in cases where you can't change the source of the icons you can also pass a map of CSS attributes that will be applied using the `:root` selector as well:
+In cases where you can't change the source of the icons you could use `$svg-icons-encode` map to replace color-codes with the `currentColor` keyword like so:
+
+```scss
+$svg-icons-encode: (
+  '#000': currentColor
+);
+```
+
+If you want to set more than just the color you can also pass a map of CSS attributes that will be applied using the `:root` selector as well:
 
 ```scss
 .foo {
