@@ -90,15 +90,15 @@ $svg-icons-encode: () !default;
   // Minimal escaping
   @for $i from 1 through $loops {
     $chunk: str-slice($svg, $index, $index + $slice - 1);
+    @each $search, $replace in $svg-icons-encode {
+      $chunk: svg-icon-str-replace($chunk, $search, $replace, true);
+    }
     $chunk: svg-icon-str-replace($chunk, '"', '\'', true);
     $chunk: svg-icon-str-replace($chunk, '%', '%25', true);
     $chunk: svg-icon-str-replace($chunk, '<', '%3C', true);
     $chunk: svg-icon-str-replace($chunk, '>', '%3E', true);
     $chunk: svg-icon-str-replace($chunk, '#', '%23', true);
     $chunk: svg-icon-str-replace($chunk, '&', '%26', true);
-    @each $search, $replace in $svg-icons-encode {
-      $chunk: svg-icon-str-replace($chunk, $search, $replace, true);
-    }
     $encoded: #{$encoded}#{$chunk};
     $index: $index + $slice;
   }
