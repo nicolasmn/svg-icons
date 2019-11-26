@@ -7,10 +7,8 @@
   $index: str-index($string, $search);
   @if $index {
     $appendix: str-slice($string, $index + str-length($search));
-    @if $replace-all {
-      @while str-index($appendix, $search) {
-        $appendix: svg-icon-str-replace($appendix, $search, $replace);
-      }
+    @if $replace-all and str-index($appendix, $search) {
+      $appendix: svg-icon-str-replace($appendix, $search, $replace, true);
     }
     @return str-slice($string, 1, $index - 1) + $replace + $appendix;
   }
