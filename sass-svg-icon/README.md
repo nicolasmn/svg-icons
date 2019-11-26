@@ -4,7 +4,7 @@ SVG icons as background-images
 `svg-icon()` is a Sass function that helps with SVG icons as background-images.
 
 - Inlines SVG icons as URI
-- Allows passing styling to the icon
+- Allows passing styling to the icon using a generated style tag
 
 Here is a basic example:
 ```scss
@@ -29,9 +29,8 @@ Compiles to:
 ## How to use it
 
 1. Install
-  - with npm: `npm install git+ssh://git@wybucket.wysiwyg.de:7999/wy/svg-icons.git --save`
-
-  OR [Download _svg-icon.scss]() into your Sass project.
+  - with npm: `npm install nicolasmn/svg-icons --save`  
+    OR [download _svg-icon.scss]() into your project.
 
 2. Import the partial in your Sass files and define `$svg-icons` map before the file is imported:
 
@@ -100,8 +99,10 @@ This pattern also allows defining `@keyframes` or `@media` queries and really an
 }
 ```
 
+_Note: Media-Queries inside SVGs behave more like Element-Queries_
+
 ## Ceveats
 
-This method won't work at all in IE because of the generated `<style>` element inside the SVG wich is not supported for inline background images (don't ask).
+This method won't work in IE at all because of the generated `<style>` tag inside the SVG wich is not supported for inline background images (don't ask).
 
 If you need to support IE you could use a [selector hack](http://browserhacks.com/) targeting only the versions you need and don't pass any styles to `svg-icon()` in there.
