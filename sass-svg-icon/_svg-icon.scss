@@ -2,6 +2,7 @@
 /// @param {String} $string - Initial string
 /// @param {String} $search - Substring to replace
 /// @param {String} $replace ('') - New value
+/// @param {Bool} $replace-all (false) - Replace all occurrences of `$search` in `$string`
 /// @return {String} - Updated string
 @function svg-icon-str-replace($string, $search, $replace: '', $replace-all: false) {
   $index: str-index($string, $search);
@@ -35,7 +36,7 @@
 /// @access private
 $svg-icon-css-is-root: true;
 
-/// Returns an CSS string of the supplied styles
+/// Returns a CSS string of the supplied styles
 /// @param {Map} $style - Map of styles to build
 /// @return {String} - CSS string
 /// @example Without selector
@@ -72,9 +73,9 @@ $svg-icon-css-is-root: true;
 // Set additional characters to encode in SVG strings
 $svg-icons-encode: () !default;
 
-/// Encodes an SVG string
+/// Encodes a SVG string
 /// @param {String} $svg - The raw SVG string
-/// @return {String} - URI-Encoded SVG string
+/// @return {String} - URI-encoded SVG string
 @function svg-icon-uri($svg) {
   // Add missing namespace
   @if not str-index($svg, 'xmlns') {
